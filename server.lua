@@ -1,12 +1,6 @@
 ESX = exports["es_extended"]:getSharedObject()
 local activeZones = {}
 
--- Hilfsfunktion zum Entfernen von GTA-Farbcodes
-local function cleanText(text)
-    if not text then return "" end
-    return text:gsub("~%a~", "")
-end
-
 local function sendGlobalNotification(title, subject, message, icon)
     if Config.NotifyType == "bulletin" then
         TriggerClientEvent('bulletin:sendAdvanced', -1, {
@@ -19,7 +13,7 @@ local function sendGlobalNotification(title, subject, message, icon)
         })
         
     elseif Config.NotifyType == "esx" then
-        TriggerClientEvent('esx:showNotification', -1, cleanText(title) .. ":\n" .. cleanText(message)) -- if u want to, make it with color for esx
+        TriggerClientEvent('esx:showNotification', -1, "~b~" .. title .. "~s~:\n" .. message) -- if u want to, make it with color for esx
     
     elseif Config.NotifyType == "ox" then
         TriggerClientEvent('ox_lib:notify', -1, {
