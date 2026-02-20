@@ -1,0 +1,23 @@
+Locales['de'] = {
+    ['access_denied'] = 'Zugriff verweigert',
+    ['menu_title'] = 'Sperrzonen Management',
+    ['create_zone'] = 'Neue Sperrzone erstellen',
+    ['create_zone_desc'] = 'Zone an aktueller Position erstellen',
+    ['delete_zones'] = 'Alle Sperrzonen löschen',
+    ['delete_zones_desc'] = 'Alle aktiven Zonen entfernen',
+    ['dialog_title'] = 'Sperrzone errichten',
+    ['dialog_msg'] = 'Nachricht',
+    ['dialog_msg_desc'] = 'Was wird im Dispatch angezeigt?',
+    ['dialog_radius'] = 'Radius (Meter)',
+    ['dialog_reason'] = 'Grund',
+    ['dialog_reason_desc'] = 'z.B. Schwerer Verkehrsunfall',
+    ['dialog_speed'] = 'NPC Geschwindigkeit',
+    ['dialog_speed_desc'] = '0 = Stop, 30 = Normal',
+    ['dialog_duration'] = 'Dauer (Minuten)',
+    ['dispatch_title'] = 'Los Santos Police Department',
+    ['dispatch_subject'] = 'SPERRZONE ERRICHTET',
+    ['dispatch_reason_prefix'] = '\nGrund: ~y~%s~s~',
+    ['dispatch_update'] = 'UPDATE',
+    ['dispatch_cleared'] = 'Alle aktiven Sperrzonen wurden soeben aufgehoben.',
+    ['keybind_desc'] = 'Sperrzonen Menü öffnen'
+}
