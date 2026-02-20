@@ -1,0 +1,23 @@
+Locales['en'] = {
+    ['access_denied'] = 'Access denied',
+    ['menu_title'] = 'Restricted Zone Management',
+    ['create_zone'] = 'Create new restricted zone',
+    ['create_zone_desc'] = 'Create zone at current position',
+    ['delete_zones'] = 'Delete all restricted zones',
+    ['delete_zones_desc'] = 'Remove all active zoones',
+    ['dialog_title'] = 'Set up restricted zone',
+    ['dialog_msg'] = 'Message',
+    ['dialog_msg_desc'] = 'What is displayed in the dispatch?',
+    ['dialog_radius'] = 'Radius (meters)',
+    ['dialog_reason'] = 'Reason',
+    ['dialog_reason_desc'] = 'e.g. Serious traffic accident',
+    ['dialog_speed'] = 'NPC speed',
+    ['dialog_speed_desc'] = '0 = Stop, 30 = Normal',
+    ['dialog_duration'] = 'Duration (minutes)',
+    ['dispatch_title'] = 'Los Santos Police Department',
+    ['dispatch_subject'] = 'RESTRICTED AREA ESTABLISHED',
+    ['dispatch_reason_prefix'] = '\nReason: ~y~%s~s~',
+    ['dispatch_update'] = 'UPDATE',
+    ['dispatch_cleared'] = 'All active restricted zones have just been lifted.',
+    ['keybind_desc'] = 'Open restricted zones menu'
+}
