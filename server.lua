@@ -1,6 +1,8 @@
 ESX = exports["es_extended"]:getSharedObject()
 local activeZones = {}
+local _U = i18n
 
+-- Benachrichtigung an alle Clients // Notification to all clients
 local function sendGlobalNotification(title, subject, message, icon)
     if Config.NotifyType == "bulletin" then
         TriggerClientEvent('bulletin:sendAdvanced', -1, {
@@ -17,8 +19,8 @@ local function sendGlobalNotification(title, subject, message, icon)
     
     elseif Config.NotifyType == "ox" then
         TriggerClientEvent('ox_lib:notify', -1, {
-            title = cleanText(title),
-            description = cleanText(message),
+            title = title,
+            description = message,
             type = 'inform',
             icon = 'shield-halved',
             duration = 10000
@@ -33,10 +35,11 @@ local function sendGlobalNotification(title, subject, message, icon)
         -- TriggerClientEvent('okokNotify:Alert', -1, title, message, 10000, 'info')
         
         TriggerClientEvent('rcrpzone:debugNotify', -1, title, message)
-        print("RCRP-zone | server.lua: Custom Notification aufgerufen, aber nicht konfiguriert!")
+        print("RCRP-zone | server.lua: Custom Notification called, but not configured!")
     end
 end
 
+-- Events
 RegisterNetEvent('rcrpzone:startZone', function(data)
     local xPlayer = ESX.GetPlayerFromId(source)
     if not Config.AuthorizedJobs[xPlayer.job.name] then return end
@@ -45,11 +48,12 @@ RegisterNetEvent('rcrpzone:startZone', function(data)
     local coords = GetEntityCoords(GetPlayerPed(source))
     activeZones[zoneId] = {id = zoneId, coords = coords}
 
-    local msgContent = data.nachricht .. "\nGrund: ~y~" .. data.grund .. "~s~"
+    local reason = data.grund or "Unbekannt"
+    local msgContent = data.nachricht .. _U('dispatch_reason_prefix', reason)
 
     sendGlobalNotification(
-        "Los Santos Police Department", 
-        "SPERRZONE ERRICHTET", 
+        _U('dispatch_title'), 
+        _U('dispatch_subject'), 
         msgContent, 
         "CHAR_CALL911"
     )
@@ -63,11 +67,11 @@ RegisterNetEvent('rcrpzone:stopZone', function()
 
     activeZones = {}
     TriggerClientEvent('rcrpzone:clearAllZones', -1)
-
+        
     sendGlobalNotification(
-        "Los Santos Police Department", 
-        "UPDATE", 
-        "Alle aktiven Sperrzonen wurden soeben aufgehoben.", 
+        _U('dispatch_title'), 
+   	    _U('dispatch_update'), 
+        _U('dispatch_cleared'), 
         "CHAR_CALL911"
     )
 end)
