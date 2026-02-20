@@ -1,6 +1,7 @@
 local currentZones = {}
+local _U = i18n
 
--- 1. Hilfsfunktion zum Löschen
+-- Funktion zum löschen der Zonen // Function for deleting zones
 local function removeZone(zoneId)
     if currentZones[zoneId] then
         if DoesBlipExist(currentZones[zoneId].radiusBlip) then 
@@ -11,29 +12,33 @@ local function removeZone(zoneId)
     end
 end
 
--- 2. Hintergrund-Loop für NPCs
+-- NPC Kontrolle während Zonen bzw. in Zonen // NPC control during zones or in zones
 CreateThread(function()
     while true do
         local sleep = 1500
         if next(currentZones) then
-            sleep = 500
             local playerCoords = GetEntityCoords(cache.ped)
-            
             for id, zone in pairs(currentZones) do
-                if #(playerCoords - zone.coords) < (zone.radius + 50.0) then
-                    local peds = GetGamePool('CPed')
+                local dist = #(playerCoords - zone.coords)
+                if dist < (zone.radius + 100.0) then
+                    sleep = 500
                     
-                    for i = 1, #peds do
-                        local ped = peds[i]
-                        if not IsPedAPlayer(ped) and not IsEntityDead(ped) and IsPedInAnyVehicle(ped, false) then
-                            local pedCoords = GetEntityCoords(ped)
+                    local nearbyPeds = lib.getNearbyPeds(zone.coords, zone.radius)
+                    if nearbyPeds then
+                        for i = 1, #nearbyPeds do
+                            local pedData = nearbyPeds[i]
+                            local ped = pedData.ped
                             
-                            if #(pedCoords - zone.coords) < zone.radius then
+                            if not IsPedAPlayer(ped) and not IsEntityDead(ped) and IsPedInAnyVehicle(ped, false) then
                                 local vehicle = GetVehiclePedIsIn(ped, false)
                                 SetBlockingOfNonTemporaryEvents(ped, true)
-                                
+                                    
                                 if zone.speed == 0 then
-                                    TaskVehicleTempAction(ped, vehicle, 27, 1500)
+                                    if GetEntitySpeed(vehicle) > 0.1 then
+                                        TaskVehicleTempAction(ped, vehicle, 27, 1000)
+                                    end
+                                else
+                                    SetDriveTaskCruiseSpeed(ped, (zone.speed / 3.6))
                                 end
                             end
                         end
@@ -45,17 +50,17 @@ CreateThread(function()
     end
 end)
 
--- 3. Dialog-Funktion
+-- ox_lib Menu der Sperrzonen // ox_lib Menu of restricted areas
 function createNewZoneDialog()
     local coords = GetEntityCoords(cache.ped)
     
-    local input = lib.inputDialog('Sperrzone errichten', {
-        {type = 'input', label = 'Nachricht', description = 'Was wird im Dispatch angezeigt?', required = true},
-        {type = 'select', label = 'Radius (Meter)', options = Config.RadiusOptions, required = true, default = "50"},
-        {type = 'input', label = 'Grund', description = 'z.B. Schwerer Verkehrsunfall', required = true},
-        {type = 'slider', label = 'NPC Geschwindigkeit', description = '0 = Stop, 30 = Normal', min = 0, max = 30, step = 5, default = 0},
-        {type = 'select', label = 'Dauer (Minuten)', options = Config.TimeOptions, required = true},
-    })
+    local input = lib.inputDialog(_U('dialog_title'), {
+    {type = 'input', label = _U('dialog_msg'), description = _U('dialog_msg_desc'), required = true},
+    {type = 'select', label = _U('dialog_radius'), options = Config.RadiusOptions, required = true, default = "50"},
+    {type = 'input', label = _U('dialog_reason'), description = _U('dialog_reason_desc'), required = true},
+    {type = 'slider', label = _U('dialog_speed'), description = _U('dialog_speed_desc'), min = 0, max = 30, step = 5, default = 0},
+    {type = 'select', label = _U('dialog_duration'), options = Config.TimeOptions, required = true},
+})
 
     if not input then return end
 
@@ -69,21 +74,20 @@ function createNewZoneDialog()
     })
 end
 
--- 4. Menü-Funktion
 function openZoneMenu()
     lib.registerContext({
         id = 'sperrzone_main_menu',
-        title = 'Sperrzonen Management',
+        title = _U('menu_title'),
         options = {
             {
-                title = 'Neue Sperrzone erstellen',
-                description = 'Zone an aktueller Position erstellen',
+                title = _U('create_zone'),
+                description = _U('create_zone_desc'),
                 icon = 'location-dot',
                 onSelect = createNewZoneDialog
             },
             {
-                title = 'Alle Sperrzonen löschen',
-                description = 'Alle aktiven Zonen für alle Spieler entfernen',
+                title = _U('delete_zones'),
+                description = _U('delete_zones_desc'),
                 icon = 'trash-can',
                 onSelect = function()
                     TriggerServerEvent('rcrpzone:stopZone')
@@ -94,10 +98,10 @@ function openZoneMenu()
     lib.showContext('sperrzone_main_menu')
 end
 
--- 5. Keybind
+-- Keybind (F6)
 lib.addKeybind({
     name = 'open_sperrzone_menu',
-    description = 'Sperrzonen Menü öffnen',
+    description = _U('keybind_desc'),
     defaultKey = 'F6',
     onPressed = function()
         local job = ESX.GetPlayerData().job.name
@@ -105,15 +109,15 @@ lib.addKeybind({
             openZoneMenu()
         else
             if Config.NotifyType == "ox" then
-                lib.notify({title = 'Zugriff verweigert', type = 'error'})
+                lib.notify({title = _U('access_denied'), type = 'error'})
             else
-                lib.notify({title = 'Zugriff verweigert', type = 'error'})
+                lib.notify({title = _U('access_denied'), type = 'error'})
             end
         end
     end
 })
 
--- 6. Events
+-- Events
 RegisterNetEvent('rcrpzone:createClientZone', function(zoneId, coords, data)
     local radiusBlip = AddBlipForRadius(coords.x, coords.y, coords.z, data.radius + 0.0)
     SetBlipHighDetail(radiusBlip, true)
@@ -121,7 +125,6 @@ RegisterNetEvent('rcrpzone:createClientZone', function(zoneId, coords, data)
     SetBlipAlpha(radiusBlip, 128)
 
     local speedZone = AddRoadNodeSpeedZone(coords.x, coords.y, coords.z, data.radius + 0.0, (data.speed or 0) / 3.6, false)
-
     currentZones[zoneId] = { 
         radiusBlip = radiusBlip, 
         speedZone = speedZone,
@@ -142,7 +145,7 @@ RegisterNetEvent('rcrpzone:clearAllZones', function()
     currentZones = {}
 end)
 
--- Event für Native GTA Notify
+-- GTA Native Notify
 RegisterNetEvent('rcrpzone:showNativeNotify', function(icon, title, subtitle, text)
     BeginTextCommandThefeedPost("STRING")
     AddTextComponentSubstringPlayerName(text)
@@ -150,7 +153,7 @@ RegisterNetEvent('rcrpzone:showNativeNotify', function(icon, title, subtitle, te
     EndTextCommandThefeedPostTicker(false, false)
 end)
 
--- Debug-Print für die F8 Konsole
+-- Wenn CUSTOM nicht konfiguriert wurde (server.lua) // If CUSTOM has not been configured (server.lua)
 RegisterNetEvent('rcrpzone:debugNotify', function(title, message)
     print("^1CUSTOM NOTIFY GETRIGGERT^0")
     print("^4Titel:^0 " .. title)
