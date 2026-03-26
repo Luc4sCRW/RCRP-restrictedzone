@@ -2,7 +2,7 @@ Config = {}
 
 Config.Locale = 'en' -- 'de', 'en' (add your own language if you want)
 
-Config.NotifyType = 'bulletin' -- 'bulletin', 'esx', 'gta', 'ox', 'custom' (add your own export in the server.lua)
+Config.NotifyType = 'gta' -- 'bulletin', 'esx', 'gta', 'ox', 'custom' (add your own export in the server.lua)
 
 Config.AuthorizedJobs = {
     ['police'] = true,
