@@ -1,6 +1,6 @@
 Config = {}
 
-Config.Locale = 'en' -- 'de', 'en'
+Config.Locale = 'en' -- 'de', 'en' (add your own language if you want)
 
 Config.NotifyType = 'bulletin' -- 'bulletin', 'esx', 'gta', 'ox', 'custom' (add your own export in the server.lua)
 
@@ -22,7 +22,6 @@ Config.RadiusOptions = {
 }
 
 Config.TimeOptions = {
-    { label = '10 Sek (Debug Test)', value = 0.166 },
     { label = '5 Min', value = 5 },
     { label = '10 Min', value = 10 },
     { label = '20 Min', value = 20 },
