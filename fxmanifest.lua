@@ -1,9 +1,9 @@
 fx_version 'cerulean'
 game 'gta5'
 
-author 'REDLINE CITY RP | RCRP'
-description 'Restricted zone Script'
-version 'v1.0 (release)'
+author 'Luc4s_CRW'
+description 'REDLINE CITY RP | RCRP - Restricted Zone'
+version '1.0 (release)'
 
 shared_scripts {
     '@es_extended/imports.lua',
