@@ -15,7 +15,7 @@ local function sendGlobalNotification(title, subject, message, icon)
         })
         
     elseif Config.NotifyType == "esx" then
-        TriggerClientEvent('esx:showNotification', -1, "~b~" .. title .. "~s~:\n" .. message) -- if u want to, make it with color for esx
+        TriggerClientEvent('esx:showNotification', -1, "~b~" .. title .. "~s~:\n" .. message)
     
     elseif Config.NotifyType == "ox" then
         TriggerClientEvent('ox_lib:notify', -1, {
