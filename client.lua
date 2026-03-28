@@ -1,7 +1,7 @@
 local currentZones = {}
 local _U = i18n
 
--- Funktion zum löschen der Zonen // Function for deleting zones
+-- Funktion zum löschen der Zonen // function for deleting zones
 local function removeZone(zoneId)
     if currentZones[zoneId] then
         if DoesBlipExist(currentZones[zoneId].radiusBlip) then 
@@ -22,7 +22,7 @@ CreateThread(function()
                 local dist = #(playerCoords - zone.coords)
                 if dist < (zone.radius + 100.0) then
                     sleep = 500
-                    
+                        
                     local nearbyPeds = lib.getNearbyPeds(zone.coords, zone.radius)
                     if nearbyPeds then
                         for i = 1, #nearbyPeds do
@@ -50,7 +50,7 @@ CreateThread(function()
     end
 end)
 
--- ox_lib Menu der Sperrzonen // ox_lib Menu of restricted areas
+-- ox_lib Menu der Sperrzonen // ox_lib menu of restricted areas
 function createNewZoneDialog()
     local coords = GetEntityCoords(cache.ped)
     
@@ -98,7 +98,7 @@ function openZoneMenu()
     lib.showContext('sperrzone_main_menu')
 end
 
--- Keybind (F6)
+-- Tastenbelegung // keybind (F6)
 lib.addKeybind({
     name = 'open_sperrzone_menu',
     description = _U('keybind_desc'),
@@ -153,10 +153,10 @@ RegisterNetEvent('rcrpzone:showNativeNotify', function(icon, title, subtitle, te
     EndTextCommandThefeedPostTicker(false, false)
 end)
 
--- Wenn CUSTOM nicht konfiguriert wurde (server.lua) // If CUSTOM has not been configured (server.lua)
+-- Wenn CUSTOM nicht konfiguriert wurde (server.lua), DEBUG Nachricht in Konsole // if CUSTOM has not been configured (server.lua), a DEBUG message is displayed in the console
 RegisterNetEvent('rcrpzone:debugNotify', function(title, message)
     print("^1CUSTOM NOTIFY GETRIGGERT^0")
     print("^4Titel:^0 " .. title)
     print("^4Nachricht:^0 " .. message)
-    print("^4Info:^0 RCRP-restrictedzone | server.lua: Custom Notification aufgerufen, aber nicht konfiguriert!")
+    print("^4Info:^0 RCRP-restrictedzone | server.lua: Custom notification called but not configured!")
 end)
