@@ -2,7 +2,7 @@ ESX = exports["es_extended"]:getSharedObject()
 local activeZones = {}
 local _U = i18n
 
--- Benachrichtigung an alle Clients // notification to all clients
+-- Benachrichtigung an alle Clients. // notification to all clients.
 local function sendGlobalNotification(title, subject, message, icon)
     if Config.NotifyType == "bulletin" then
         TriggerClientEvent('bulletin:sendAdvanced', -1, {
@@ -30,8 +30,8 @@ local function sendGlobalNotification(title, subject, message, icon)
         TriggerClientEvent('rcrpzone:showNativeNotify', -1, icon, title, subject, message)
         
     elseif Config.NotifyType == "custom" then       
-        -- add your own Export!
-        -- Example for okokNotify:
+        -- Füge dein eigenes Event hinzu! // add your own Event!
+        -- Beispiel für okokNotify // Example for okokNotify:
         -- TriggerClientEvent('okokNotify:Alert', -1, title, message, 10000, 'info')
         
         TriggerClientEvent('rcrpzone:debugNotify', -1, title, message)
