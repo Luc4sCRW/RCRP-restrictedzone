@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Luc4s_CRW'
 description 'REDLINE CITY RP | RCRP - Restricted Zone'
-version '1.0 (release)'
+version '1.0.0 (release)'
 
 shared_scripts {
     '@es_extended/imports.lua',
