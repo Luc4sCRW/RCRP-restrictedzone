@@ -1,6 +1,6 @@
 # 📍 REDLINE CITY RP - RESTRICTED ZONE (RCRP-restrictedzone) | v1.0.0
 
-‼️ ***YOU CAN CHANGE THE CODE, BUT YOU ARE NOT ALLOWED TO REUPLOAD THE HUD TO ANY PLATFORM!*** ‼️
+‼️ ***YOU CAN CHANGE THE CODE, BUT YOU ARE NOT ALLOWED TO REUPLOAD THIS SCRIPT TO ANY PLATFORM!*** ‼️
 
 # ***GERMAN***
 Ein Script zum Erstellen von Sperrzonen (nur mit Job, zbsp. Polizei). 
