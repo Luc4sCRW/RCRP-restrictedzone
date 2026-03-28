@@ -43,6 +43,8 @@ A script for creating restricted zones (only available with a job, e.g., police)
  `            ensure RCRP-restrictedzone            `
 3. Configure the script in the config file to suit your needs.
 
+# DEPENDENCY
+- ox_lib (https://github.com/overextended/ox_lib/releases)
 
 # PREVIEW
 
