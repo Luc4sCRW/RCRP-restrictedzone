@@ -2,7 +2,7 @@ ESX = exports["es_extended"]:getSharedObject()
 local activeZones = {}
 local _U = i18n
 
--- Benachrichtigung an alle Clients. // notification to all clients.
+-- Benachrichtigung an alle Clients // notification to all clients
 local function sendGlobalNotification(title, subject, message, icon)
     if Config.NotifyType == "bulletin" then
         TriggerClientEvent('bulletin:sendAdvanced', -1, {
