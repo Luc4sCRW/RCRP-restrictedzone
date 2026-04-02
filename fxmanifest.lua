@@ -17,5 +17,7 @@ shared_scripts {
 client_script 'client.lua'
 server_script 'server.lua'
 
+-- dependency 'ox_lib'
+
 -- NEXT UPDATE: delete menu mit den einzelnen sperrzonen die errichtet sind mit straßen name weil alle löschen wenn da iwas ist is kacke; jeder job einzelnes menu weil kompatibilität mit zbsp FD/Ambulance und ambesten
 --              FD hat ROT, PD hat BLAU, Noose/admin zbsp dann grün/gelb oder sowas... erkennung vom job ändern die überschrift, nicht nur LSPD halt... 
