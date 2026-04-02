@@ -6,7 +6,7 @@ Config.NotifyType = 'gta' -- 'bulletin', 'esx', 'gta', 'ox', 'custom' (add your 
 
 Config.AuthorizedJobs = {
     ['police'] = true,
-    ['noose'] = true
+    ['noose'] = true -- add or change jobs
 }
 
 Config.RadiusOptions = {
