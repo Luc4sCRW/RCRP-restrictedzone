@@ -11,7 +11,6 @@ Ein Script zum Erstellen von Sperrzonen (nur mit Job, zbsp. Polizei).
 - NPC Verkehrssteuerung (Geschwindigkeit für NPCs anpassen)
 - Blip Radius (Zone) auf Map erstellen
 - Automatisches entfernen nach Zeitablauf
-- Einzelne oder alle Zonen löschbar
 - Jobbasierter Zugriff
 - Notify Kompatibilität (ESX, GTA Native, Bulletin, OX oder ein eigenes selber hinzufügen)
 
@@ -32,7 +31,6 @@ A script for creating restricted zones (only available with a job, e.g., police)
 - NPC traffic control (adjust NPC speed)
 - Create blip radius (zone) on map
 - Automatic removal after a set time
-- Delete individual or all zones
 - Job-based access
 - Notification compatibility (ESX, GTA Native, Bulletin, OX, or add your own)
 
