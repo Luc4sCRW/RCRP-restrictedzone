@@ -50,7 +50,7 @@ CreateThread(function()
     end
 end)
 
--- ox_lib Menu der Sperrzonen // ox_lib menu of restricted areas
+-- ox_lib Menu // ox_lib menu
 function createNewZoneDialog()
     local coords = GetEntityCoords(cache.ped)
     
