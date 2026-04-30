@@ -49,7 +49,7 @@ https://streamable.com/bgmqrj
 
 # UPDATES
 
-Updates for scripts are always announced on the Discord server. So feel free to join the Discord server to stay up to date. - I wont use the “Releases” feature of GitHub.
+Updates for scripts are always announced on the Discord server. So feel free to join the Discord server to stay up to date.
 
 
 # *** LICENSE ***
