@@ -2,7 +2,7 @@ local currentZones = {}
 local _U = i18n
 
 -- Funktion zum löschen der Zonen // function for deleting zones
-local function removeZone(zoneId)
+local function removeZone(zoneId)  
     if currentZones[zoneId] then
         if DoesBlipExist(currentZones[zoneId].radiusBlip) then 
             RemoveBlip(currentZones[zoneId].radiusBlip) 
@@ -10,6 +10,49 @@ local function removeZone(zoneId)
         RemoveRoadNodeSpeedZone(currentZones[zoneId].speedZone)
         currentZones[zoneId] = nil
     end
+end
+
+function openSpecificDeleteMenu()
+    local options = {}
+    local myJob = ESX.GetPlayerData().job.name
+    local jobConfig = Config.AuthorizedJobs[myJob]
+
+    if not jobConfig then return end
+
+    for id, zone in pairs(currentZones) do
+        if jobConfig.deleteOther or zone.creatorJob == myJob then
+            local descString = "Reason: " .. (zone.reason or "Not specified")
+            if jobConfig.deleteOther then
+                local creatorLabel = "unknown job"
+                if Config.AuthorizedJobs[zone.creatorJob] then
+                    creatorLabel = Config.AuthorizedJobs[zone.creatorJob].label
+                end
+                descString = descString .. "\nCreated by: " .. creatorLabel
+            end
+
+            table.insert(options, {
+                title = zone.location or "unknown location",
+                description = descString,
+                icon = 'location-dot',
+                onSelect = function()
+                    TriggerServerEvent('rcrpzone:stopSpecificZone', id)
+                end
+            })
+        end
+    end
+
+    if #options == 0 then
+        lib.notify({title = jobConfig.menuTitle, description = _U('no_active_zones'), type = 'error'})
+        return
+    end
+
+    lib.registerContext({
+        id = 'delete_select',
+        title = _U('delete_spec_zones'),
+        menu = 'sperrzone_main_menu',
+        options = options
+    })
+    lib.showContext('delete_select')
 end
 
 -- NPC Kontrolle während Zonen bzw. in Zonen // NPC control during zones or in zones
@@ -22,7 +65,7 @@ CreateThread(function()
                 local dist = #(playerCoords - zone.coords)
                 if dist < (zone.radius + 100.0) then
                     sleep = 500
-                        
+                    
                     local nearbyPeds = lib.getNearbyPeds(zone.coords, zone.radius)
                     if nearbyPeds then
                         for i = 1, #nearbyPeds do
@@ -55,29 +98,29 @@ function createNewZoneDialog()
     local coords = GetEntityCoords(cache.ped)
     
     local input = lib.inputDialog(_U('dialog_title'), {
-    {type = 'input', label = _U('dialog_msg'), description = _U('dialog_msg_desc'), required = true},
-    {type = 'select', label = _U('dialog_radius'), options = Config.RadiusOptions, required = true, default = "50"},
-    {type = 'input', label = _U('dialog_reason'), description = _U('dialog_reason_desc'), required = true},
-    {type = 'slider', label = _U('dialog_speed'), description = _U('dialog_speed_desc'), min = 0, max = 30, step = 5, default = 0},
-    {type = 'select', label = _U('dialog_duration'), options = Config.TimeOptions, required = true},
-})
+        {type = 'input', label = _U('dialog_msg'), description = _U('dialog_msg_desc'), required = true},
+        {type = 'select', label = _U('dialog_radius'), options = Config.RadiusOptions, required = true, default = "50"},
+        {type = 'input', label = _U('dialog_reason'), description = _U('dialog_reason_desc'), required = true},
+        {type = 'slider', label = _U('dialog_speed'), description = _U('dialog_speed_desc'), min = 0, max = 30, step = 5, default = 0},
+        {type = 'select', label = _U('dialog_duration'), options = Config.TimeOptions, required = true},
+    })
 
     if not input then return end
 
     TriggerServerEvent('rcrpzone:startZone', {
         coords = coords,
-        nachricht = input[1],
+        message = input[1],
         radius = tonumber(input[2]),
-        grund = input[3],
+        reason = input[3],
         speed = tonumber(input[4]),
         duration = tonumber(input[5])
     })
 end
 
-function openZoneMenu()
+function openZoneMenu(jobData)
     lib.registerContext({
         id = 'sperrzone_main_menu',
-        title = _U('menu_title'),
+        title = jobData.menuTitle,
         options = {
             {
                 title = _U('create_zone'),
@@ -86,12 +129,10 @@ function openZoneMenu()
                 onSelect = createNewZoneDialog
             },
             {
-                title = _U('delete_zones'),
-                description = _U('delete_zones_desc'),
-                icon = 'trash-can',
-                onSelect = function()
-                    TriggerServerEvent('rcrpzone:stopZone')
-                end
+                title = _U('delete_spec_zones'),
+                description = _U('delete_spec_zones_desc'),
+                icon = 'list',
+                onSelect = openSpecificDeleteMenu
             }
         }
     })
@@ -106,22 +147,18 @@ lib.addKeybind({
     onPressed = function()
         local job = ESX.GetPlayerData().job.name
         if Config.AuthorizedJobs[job] then
-            openZoneMenu()
+            openZoneMenu(Config.AuthorizedJobs[job])
         else
-            if Config.NotifyType == "ox" then
-                lib.notify({title = _U('access_denied'), type = 'error'})
-            else
-                lib.notify({title = _U('access_denied'), type = 'error'})
-            end
+            lib.notify({title = _U('access_denied'), type = 'error'})
         end
     end
 })
 
 -- Events
-RegisterNetEvent('rcrpzone:createClientZone', function(zoneId, coords, data)
+RegisterNetEvent('rcrpzone:createClientZone', function(zoneId, coords, data, jobColor, creatorJob)
     local radiusBlip = AddBlipForRadius(coords.x, coords.y, coords.z, data.radius + 0.0)
     SetBlipHighDetail(radiusBlip, true)
-    SetBlipColour(radiusBlip, 1)
+    SetBlipColour(radiusBlip, jobColor)
     SetBlipAlpha(radiusBlip, 128)
 
     local speedZone = AddRoadNodeSpeedZone(coords.x, coords.y, coords.z, data.radius + 0.0, (data.speed or 0) / 3.6, false)
@@ -130,7 +167,10 @@ RegisterNetEvent('rcrpzone:createClientZone', function(zoneId, coords, data)
         speedZone = speedZone,
         coords = coords,
         radius = data.radius + 0.0,
-        speed = data.speed
+        speed = data.speed,
+        location = getStreetAndDistrict(coords),
+        reason = data.reason,
+        creatorJob = creatorJob
     }
 
     SetTimeout(data.duration * 60000, function()
@@ -138,11 +178,8 @@ RegisterNetEvent('rcrpzone:createClientZone', function(zoneId, coords, data)
     end)
 end)
 
-RegisterNetEvent('rcrpzone:clearAllZones', function()
-    for id, _ in pairs(currentZones) do
-        removeZone(id)
-    end
-    currentZones = {}
+RegisterNetEvent('rcrpzone:removeSpecificZone', function(zoneId)
+    removeZone(zoneId)
 end)
 
 -- GTA Native Notify
@@ -155,7 +192,7 @@ end)
 
 -- Wenn CUSTOM nicht konfiguriert wurde (server.lua), DEBUG Nachricht in Konsole // if CUSTOM has not been configured (server.lua), a DEBUG message is displayed in the console
 RegisterNetEvent('rcrpzone:debugNotify', function(title, message)
-    print("^1CUSTOM NOTIFY GETRIGGERT^0")
+    print("^1CUSTOM NOTIFY TRIGGERED^0")
     print("^4Titel:^0 " .. title)
     print("^4Nachricht:^0 " .. message)
     print("^4Info:^0 RCRP-restrictedzone | server.lua: Custom notification called but not configured!")
