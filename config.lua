@@ -1,12 +1,38 @@
 Config = {}
 
-Config.Locale = 'en' -- 'de', 'en' (add your own language if you want)
+Config.Locale = 'de' -- 'de', 'en' (add your own language if you want)
 
-Config.NotifyType = 'gta' -- 'bulletin', 'esx', 'gta', 'ox', 'custom' (add your own export in the server.lua)
+Config.NotifyType = 'gta' -- 'bulletin', 'esx', 'gta', 'ox', 'custom' (next update will fix ox message and esx message) | Recommendation: BULLETIN, GTA! | add your own export in the server.lua
 
 Config.AuthorizedJobs = {
-    ['police'] = true,
-    ['noose'] = true -- add or change jobs
+    ['police'] = {
+        label = "Los Santos Police Department",
+        blipColor = 3, -- Blue
+        menuTitle = "LSPD Sperrzonen",
+        icon = "CHAR_CALL911",
+        deleteOther = false -- If set to “false” that job is only allowed to remove its own restricted zones
+    },
+    ['noose'] = {
+        label = "NOOSE Tactical Unit",
+        blipColor = 5, -- Yellow
+        menuTitle = "NOOSE Sperrzonen",
+        icon = "CHAR_CALL911",
+        deleteOther = true
+    },
+    ['ambulance'] = {
+        label = "San Andreas Medical Services",
+        blipColor = 6, -- Light Red
+        menuTitle = "SAMS Sperrzonen",
+        icon = "CHAR_CALL911",
+        deleteOther = false
+    },
+    ['lsfd'] = {
+        label = "Los Santos Fire Department",
+        blipColor = 1, -- Red
+        menuTitle = "LSFD Sperrzonen",
+        icon = "CHAR_CALL911",
+        deleteOther = false
+    }
 }
 
 Config.RadiusOptions = {
