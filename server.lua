@@ -42,36 +42,59 @@ end
 -- Events
 RegisterNetEvent('rcrpzone:startZone', function(data)
     local xPlayer = ESX.GetPlayerFromId(source)
-    if not Config.AuthorizedJobs[xPlayer.job.name] then return end
-
+    local jobName = xPlayer.job.name
+    if not Config.AuthorizedJobs[jobName] then return end
+    
+    local jobConfig = Config.AuthorizedJobs[jobName]
     local zoneId = math.random(1000, 9999)
     local coords = GetEntityCoords(GetPlayerPed(source))
-    activeZones[zoneId] = {id = zoneId, coords = coords}
 
-    local reason = data.grund or "Unbekannt"
-    local msgContent = data.nachricht .. _U('dispatch_reason_prefix', reason)
+    activeZones[zoneId] = {id = zoneId, coords = coords, creatorJob = jobName}
+
+    local reason = data.reason or "Unknown"
+    local msgContent = data.message .. _U('dispatch_reason_prefix', reason)
 
     sendGlobalNotification(
-        _U('dispatch_title'), 
+        jobConfig.label, 
         _U('dispatch_subject'), 
         msgContent, 
-        "CHAR_CALL911"
+        jobConfig.icon
     )
 
-    TriggerClientEvent('rcrpzone:createClientZone', -1, zoneId, coords, data)
+    TriggerClientEvent('rcrpzone:createClientZone', -1, zoneId, coords, data, jobConfig.blipColor, jobName)
 end)
 
-RegisterNetEvent('rcrpzone:stopZone', function()
+-- Zonen löschen // delete zones
+RegisterNetEvent('rcrpzone:stopSpecificZone', function(zoneId)
     local xPlayer = ESX.GetPlayerFromId(source)
-    if not Config.AuthorizedJobs[xPlayer.job.name] then return end
+    local jobName = xPlayer.job.name
+    
+    local myJobConfig = Config.AuthorizedJobs[jobName]
+    if not myJobConfig then return end
 
-    activeZones = {}
-    TriggerClientEvent('rcrpzone:clearAllZones', -1)
+    if activeZones[zoneId] then
+        local zoneCreatorJob = activeZones[zoneId].creatorJob
+
+        -- Sicherheitscheck bezüglich Job // job security check
+        if not myJobConfig.deleteOther and zoneCreatorJob ~= jobName then
+            TriggerClientEvent('ox_lib:notify', source, {
+                title = myJobConfig.menuTitle,
+                description = "Du bist nicht berechtigt, diese Zone zu löschen!",
+                type = 'error'
+            })
+            return
+        end
+
+        local originalJobConfig = Config.AuthorizedJobs[zoneCreatorJob] or myJobConfig
         
-    sendGlobalNotification(
-        _U('dispatch_title'), 
-   	    _U('dispatch_update'), 
-        _U('dispatch_cleared'), 
-        "CHAR_CALL911"
-    )
+        activeZones[zoneId] = nil
+        TriggerClientEvent('rcrpzone:removeSpecificZone', -1, zoneId)
+        
+        sendGlobalNotification(
+            originalJobConfig.label, 
+            _U('dispatch_update'), 
+            _U('dispatch_cleared2'),
+            originalJobConfig.icon
+        )
+    end
 end)
