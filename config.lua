@@ -1,6 +1,6 @@
 Config = {}
 
-Config.Locale = 'de' -- 'de', 'en' (add your own language if you want)
+Config.Locale = 'en' -- 'de', 'en' (add your own language if you want)
 
 Config.NotifyType = 'gta' -- 'bulletin', 'esx', 'gta', 'ox', 'custom' (next update will fix ox message and esx message) | Recommendation: BULLETIN, GTA! | add your own export in the server.lua
 
