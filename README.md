@@ -50,6 +50,7 @@ https://streamable.com/bgmqrj
 # UPDATES
 
 Updates for scripts are always announced on the Discord server. So feel free to join the Discord server to stay up to date.
+-> One of the upcoming updates should include a fix for ox_lib regarding the color.
 
 
 # *** LICENSE ***
