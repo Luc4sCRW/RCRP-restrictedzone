@@ -45,7 +45,7 @@ A script for creating restricted zones (only available with a job, e.g., police)
 - ox_lib (https://github.com/overextended/ox_lib/releases)
 
 # PREVIEW
-https://streamable.com/bgmqrj
+https://r2.fivemanage.com/Z0gKhrJCcouiaHNjSd1Di/CRW_bodycamPREVIEW.mp4
 
 # UPDATES
 
