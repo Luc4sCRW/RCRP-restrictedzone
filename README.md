@@ -45,7 +45,7 @@ A script for creating restricted zones (only available with a job, e.g., police)
 - ox_lib (https://github.com/overextended/ox_lib/releases)
 
 # PREVIEW
-(...)
+https://r2.fivemanage.com/Z0gKhrJCcouiaHNjSd1Di/RCRP-restrictedzone.mp4
 
 # UPDATES
 
