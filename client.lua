@@ -1,6 +1,18 @@
 local currentZones = {}
 local _U = i18n
 
+-- Straße und Bezirk ermitteln // Get street and district
+local function getStreetAndDistrict(coords)
+    local s1, s2 = GetStreetNameAtCoord(coords.x, coords.y, coords.z)
+    local street = GetStreetNameFromHashKey(s1)
+    if s2 ~= 0 then street = street .. " / " .. GetStreetNameFromHashKey(s2) end
+    
+    local zoneName = GetNameOfZone(coords.x, coords.y, coords.z)
+    local district = GetLabelText(zoneName) or "Unknown"
+    
+    return street .. " (" .. district .. ")"
+end
+
 -- Funktion zum löschen der Zonen // function for deleting zones
 local function removeZone(zoneId)  
     if currentZones[zoneId] then
