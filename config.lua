@@ -8,28 +8,28 @@ Config.AuthorizedJobs = {
     ["police"] = {
         label = "Los Santos Police Department",
         blipColor = 3, -- Blue
-        menuTitle = "LSPD Sperrzonen",
+        menuTitle = "LSPD",
         icon = "CHAR_CALL911",
         deleteOther = false -- If set to “false” that job is only allowed to remove its own restricted zones
     },
     ["noose"] = {
         label = "NOOSE Tactical Unit",
         blipColor = 5, -- Yellow
-        menuTitle = "NOOSE Sperrzonen",
+        menuTitle = "NOOSE",
         icon = "CHAR_CALL911",
         deleteOther = true
     },
     ["ambulance"] = {
         label = "San Andreas Medical Services",
         blipColor = 6, -- Light Red
-        menuTitle = "SAMS Sperrzonen",
+        menuTitle = "SAMS",
         icon = "CHAR_CALL911",
         deleteOther = false
     },
     ["lsfd"] = {
         label = "Los Santos Fire Department",
         blipColor = 1, -- Red
-        menuTitle = "LSFD Sperrzonen",
+        menuTitle = "LSFD",
         icon = "CHAR_CALL911",
         deleteOther = false
     }
